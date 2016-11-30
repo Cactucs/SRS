@@ -104,7 +104,11 @@ class EvidencePresenter extends BasePresenter
         $this->template->pays = $user->countFee()['fee'] != 0;
     }
 
-    public function renderEditRoles($ids = array()) {
+    public function renderEditRoles() {
+        $session = $this->getSession();
+        $evidenceActionSection = $session->getSection('evidenceActionSection');
+        $ids = $evidenceActionSection->ids;
+
         if (count($ids) == 0)
             $this->redirect(':Back:Evidence:list');
 
@@ -196,8 +200,12 @@ class EvidencePresenter extends BasePresenter
         $printer->printPaymentProofs(array($user));
     }
 
-    public function handlePrintPaymentProofs($ids = array())
+    public function handlePrintPaymentProofs()
     {
+        $session = $this->getSession();
+        $evidenceActionSection = $session->getSection('evidenceActionSection');
+        $ids = $evidenceActionSection->ids;
+
         $users = [];
 
         foreach ($ids as $userId) {
@@ -212,10 +220,14 @@ class EvidencePresenter extends BasePresenter
         $printer->printPaymentProofs($users);
     }
 
-    public function handleExportUsersList($ids = array())
+    public function handleExportUsersList()
     {
         $roles = $this->context->database->getRepository('\SRS\model\Acl\Role')->findAll();
         $users = array();
+
+        $session = $this->getSession();
+        $evidenceActionSection = $session->getSection('evidenceActionSection');
+        $ids = $evidenceActionSection->ids;
 
         foreach ($ids as $userId) {
             $users[] = $this->userRepo->find($userId);
@@ -227,10 +239,14 @@ class EvidencePresenter extends BasePresenter
         $this->sendResponse($response);
     }
 
-    public function handleExportMiquik($ids = array())
+    public function handleExportMiquik()
     {
         $roles = $this->context->database->getRepository('\SRS\model\Acl\Role')->findAll();
         $users = array();
+
+        $session = $this->getSession();
+        $evidenceActionSection = $session->getSection('evidenceActionSection');
+        $ids = $evidenceActionSection->ids;
 
         foreach ($ids as $userId) {
             $users[] = $this->userRepo->find($userId);
@@ -242,9 +258,14 @@ class EvidencePresenter extends BasePresenter
         $this->sendResponse($response);
     }
 
-    public function handleExportUsersSchedules($ids = array())
+    public function handleExportUsersSchedules()
     {
         $users = array();
+
+        $session = $this->getSession();
+        $evidenceActionSection = $session->getSection('evidenceActionSection');
+        $ids = $evidenceActionSection->ids;
+
 
         foreach ($ids as $userId) {
             $users[] = $this->userRepo->find($userId);

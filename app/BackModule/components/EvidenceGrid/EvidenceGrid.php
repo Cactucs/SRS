@@ -258,9 +258,7 @@ class EvidenceGrid extends Grid
 
             $presenter->context->database->flush();
             $self->flashMessage("Záznam byl úspěšně uložen.", "success");
-
-        }
-        );
+        });
 
         $this->addAction("makeThemPayBank", "Označit jako zaplacené dnes přes účet")
             ->setCallback(function ($id) use ($self) {
@@ -279,22 +277,34 @@ class EvidenceGrid extends Grid
 
         $this->addAction("printPaymentProofs", "Vytisknout doklad o zaplacení")->setAjax(false)
             ->setCallback(function ($id) use ($presenter) {
-                $presenter->redirect('printPaymentProofs!', array('ids' => $id));
+                $session = $presenter->getSession();
+                $evidenceActionSection = $session->getSection('evidenceActionSection');
+                $evidenceActionSection->ids = $id;
+                $presenter->redirect('printPaymentProofs!');
             });
 
         $this->addAction("exportUsersList", "Vyexportovat účastníky a role")->setAjax(false)
             ->setCallback(function ($id) use ($presenter) {
-                $presenter->redirect('exportUsersList!', array('ids' => $id));
+                $session = $presenter->getSession();
+                $evidenceActionSection = $session->getSection('evidenceActionSection');
+                $evidenceActionSection->ids = $id;
+                $presenter->redirect('exportUsersList!');
             });
 
         $this->addAction("exportMiquik", "Vyexportovat pro Miquik vstupenky")->setAjax(false)
             ->setCallback(function ($id) use ($presenter) {
-                $presenter->redirect('exportMiquik!', array('ids' => $id));
+                $session = $presenter->getSession();
+                $evidenceActionSection = $session->getSection('evidenceActionSection');
+                $evidenceActionSection->ids = $id;
+                $presenter->redirect('exportMiquik!');
             });
 
         $this->addAction("exportUsersSchedules", "Stáhnout harmonogram")->setAjax(false)
             ->setCallback(function ($id) use ($presenter) {
-                $presenter->redirect('exportUsersSchedules!', array('ids' => $id));
+                $session = $presenter->getSession();
+                $evidenceActionSection = $session->getSection('evidenceActionSection');
+                $evidenceActionSection->ids = $id;
+                $presenter->redirect('exportUsersSchedules!');
             });
 
         $this->addAction("approve", "Schválit")
@@ -304,7 +314,10 @@ class EvidenceGrid extends Grid
 
         $this->addAction("editRole", "Výběr role")->setAjax(false)
             ->setCallback(function ($id) use ($presenter) {
-                $presenter->redirect('editRoles', array('ids' => $id));
+                $session = $presenter->getSession();
+                $evidenceActionSection = $session->getSection('evidenceActionSection');
+                $evidenceActionSection->ids = $id;
+                $presenter->redirect('editRoles');
             });
     }
 
@@ -392,8 +405,7 @@ class EvidenceGrid extends Grid
             } else {
                 $this->flashMessage("Vybraný uživatel byl schválen.", "success");
             }
-        }
-        else {
+        } else {
             $this->flashMessage("Kapacita role byla překročena.", "error");
         }
 
